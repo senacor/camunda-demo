@@ -1,0 +1,13 @@
+spring.application.name: camunda-demo
+
+camunda:
+  client:
+    mode: oidc
+    auth:
+      client-id: zeebe
+      client-secret: zecret
+
+zeebe:
+  client:
+    security:
+      plaintext: true
