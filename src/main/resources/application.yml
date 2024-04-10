@@ -1,4 +1,6 @@
-spring.application.name: camunda-demo
+spring:
+  application:
+    name: camunda-demo
 
 camunda:
   client:
