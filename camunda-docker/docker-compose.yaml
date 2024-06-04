@@ -1,8 +1,9 @@
+name: camunda-platform-demo
 services:
 
   zeebe: # https://docs.camunda.io/docs/self-managed/platform-deployment/docker/#zeebe
     image: camunda/zeebe:${CAMUNDA_PLATFORM_VERSION}
-    container_name: zeebe
+    container_name: zeebe-demo
     ports:
       - "26500:26500"
       - "9600:9600"
@@ -37,7 +38,7 @@ services:
 
   operate: # https://docs.camunda.io/docs/self-managed/platform-deployment/docker/#operate
     image: camunda/operate:${CAMUNDA_PLATFORM_VERSION}
-    container_name: operate
+    container_name: operate-demo
     ports:
       - "8081:8080"
     environment: # https://docs.camunda.io/docs/self-managed/operate-deployment/configuration/
@@ -81,7 +82,7 @@ services:
 
   tasklist: # https://docs.camunda.io/docs/self-managed/platform-deployment/docker/#tasklist
     image: camunda/tasklist:${CAMUNDA_PLATFORM_VERSION}
-    container_name: tasklist
+    container_name: tasklist-demo
     ports:
       - "8082:8080"
     environment: # https://docs.camunda.io/docs/self-managed/tasklist-deployment/configuration/
@@ -128,7 +129,7 @@ services:
 
   connectors: # https://docs.camunda.io/docs/components/integration-framework/connectors/out-of-the-box-connectors/available-connectors-overview/
     image: camunda/connectors-bundle:${CAMUNDA_CONNECTORS_VERSION}
-    container_name: connectors
+    container_name: connectors-demo
     ports:
       - "8085:8080"
     environment:
@@ -163,7 +164,7 @@ services:
 
   optimize: # https://docs.camunda.io/docs/self-managed/platform-deployment/docker/#optimize
     image: camunda/optimize:${CAMUNDA_OPTIMIZE_VERSION}
-    container_name: optimize
+    container_name: optimize-demo
     ports:
       - "8083:8090"
     environment: # https://docs.camunda.io/docs/self-managed/optimize-deployment/setup/installation/#available-environment-variables
@@ -199,7 +200,7 @@ services:
       - elasticsearch
 
   identity: # https://docs.camunda.io/docs/self-managed/platform-deployment/docker/#identity
-    container_name: identity
+    container_name: identity-demo
     image: camunda/identity:${CAMUNDA_PLATFORM_VERSION}
     ports:
       - "8084:8084"
@@ -257,7 +258,7 @@ services:
         condition: service_healthy
 
   postgres: # https://hub.docker.com/_/postgres
-    container_name: postgres
+    container_name: postgres-demo
     image: postgres:${POSTGRES_VERSION}
     environment:
       POSTGRES_DB: bitnami_keycloak
@@ -275,7 +276,7 @@ services:
       - identity-network
 
   keycloak: # https://hub.docker.com/r/bitnami/keycloak
-    container_name: keycloak
+    container_name: keycloak-demo
     image: bitnami/keycloak:${KEYCLOAK_SERVER_VERSION}
     volumes:
       - keycloak-theme:/opt/bitnami/keycloak/themes/identity
@@ -302,7 +303,7 @@ services:
 
   elasticsearch: # https://hub.docker.com/_/elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
-    container_name: elasticsearch
+    container_name: elasticsearch-demo
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -330,7 +331,7 @@ services:
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
-    container_name: kibana
+    container_name: kibana-demo
     ports:
       - 5601:5601
     volumes:

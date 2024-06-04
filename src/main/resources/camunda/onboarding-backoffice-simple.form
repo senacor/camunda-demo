@@ -1,0 +1,55 @@
+{
+  "components": [
+    {
+      "label": "Owner",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_08ekm8f",
+        "columns": null
+      },
+      "id": "Field_12o53co",
+      "key": "formOwner",
+      "readonly": true
+    },
+    {
+      "values": [
+        {
+          "label": "SUCCESS",
+          "value": "SUCCESS"
+        },
+        {
+          "label": "FAILED",
+          "value": "FAILED"
+        }
+      ],
+      "label": "Approval",
+      "type": "select",
+      "layout": {
+        "row": "Row_1ty12vb",
+        "columns": null
+      },
+      "id": "Field_1hd2kz0",
+      "key": "formStatus",
+      "defaultValue": "<none>"
+    },
+    {
+      "label": "Details",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_049o5pw",
+        "columns": null
+      },
+      "id": "Field_0jshn33",
+      "key": "formDetails"
+    }
+  ],
+  "type": "default",
+  "id": "onboarding-backoffice-simple-form",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.4.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.21.0"
+  },
+  "schemaVersion": 15
+}

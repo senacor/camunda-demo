@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  description: Api for onboarding using camunda
+  title: OnboardingProcess
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - description: Onboarding process api
+    name: onboardingProcess
+paths:
+  /onboarding/process:
+    post:
+      description: Start onboarding process
+      operationId: startOnboarding
+      tags:
+        - onboardingProcess
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Onboarding'
+      responses:
+        200:
+          $ref: '#/components/responses/OnboardingResponse'
+        400:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+  /onboarding/process/{onboarding-id}/messages/{message-id}:
+    parameters:
+      - $ref: '#/components/parameters/Onboarding-id'
+      - $ref: '#/components/parameters/Message-id'
+    post:
+      description: Send message
+      operationId: sendMessage
+      tags:
+        - onboardingProcess
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        202:
+          description: Message accepted
+        400:
+          $ref: '#/components/responses/Error'
+        500:
+          $ref: '#/components/responses/Error'
+components:
+  parameters:
+    Onboarding-id:
+      description: Represents camunda process id
+      name: onboarding-id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    Message-id:
+      description: Represents camunda process id
+      name: message-id
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Onboarding:
+      description: Represents onboarding data
+      type: object
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        monthIncome:
+          type: integer
+          format: int64
+          minimum: 1
+          description: Income per month in euro
+          example: 1000
+        amountOfCreditCards:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Amount of credit cards
+          example: 2
+    Person:
+      description: Represents person data
+      type: object
+      properties:
+        firstName:
+          type: string
+          example: Albert
+        secondName:
+          type: string
+          example: Einstein
+        contact:
+          $ref: '#/components/schemas/Contact'
+        birthday:
+          "type": string
+          "format": date
+          "description": The date format must conform to the RFC 3339 standard.
+          "example": 1990-05-17
+    Contact:
+      description: Represents contact data
+      type: object
+      properties:
+        mail:
+          type: string
+          example: albert.einstein@test.de
+        phoneNumber:
+          type: string
+          example: +4917843297854
+    Message:
+      description: Represents message data
+      type: object
+      properties:
+        message:
+          description: Represents generic message
+          type: object
+          example: {}
+    OnboardingCompletionMessage:
+      description: Represents completion message data
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/CompletionStatus'
+    CompletionStatus:
+      description: Represents completion statuses
+      type: string
+      enum:
+        - SUCCESS
+        - FAILED
+    Error:
+      description: Represents error data
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: "Unexpected error"
+
+  responses:
+    OnboardingResponse:
+      description: Returns onboarding data that could be used to retrieve or to update onboarding process
+      content:
+        application/json:
+          schema:
+            required:
+              - onboardingId
+              - processId
+            properties:
+              onboardingId:
+                type: string
+                format: uuid
+                example: 62c254c5-24cd-492e-8498-88bf00963367
+              processId:
+                type: integer
+                format: int64
+                example: 2251799813756323
+    Error:
+      description: Returns error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
