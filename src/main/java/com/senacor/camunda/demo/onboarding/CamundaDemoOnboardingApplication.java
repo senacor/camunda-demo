@@ -4,11 +4,7 @@ import io.camunda.zeebe.spring.client.annotation.Deployment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(
-        scanBasePackages = {
-                "com.senacor.camunda.demo.onboarding.**"
-        }
-)
+@SpringBootApplication
 @Deployment(resources = {
         "classpath*:/camunda/**/*.bpmn",
         "classpath*:/camunda/**/*.form"
