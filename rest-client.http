@@ -1,0 +1,27 @@
+### start main onboarding
+POST http://localhost:8080/onboarding/process
+Content-Type: application/json
+
+{
+  "person": {
+    "firstName": "Albert",
+    "secondName": "Einstein",
+    "contact": {
+      "mail": "albert.einstein@test.de",
+      "phoneNumber": "4917843297854"
+    },
+    "birthday": "1990-05-17"
+  },
+  "monthIncome": 1000,
+  "amountOfCreditCards": 1
+}
+
+### Send message to main process
+POST http://localhost:8080/onboarding/process/280d7dbf-d8b5-4c32-8ee5-f1638b19561d/messages/person-authentication-completed
+Content-Type: application/json
+
+{
+  "message": {
+    "status": "SUCCESS"
+  }
+}
