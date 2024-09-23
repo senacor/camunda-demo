@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ypow7h" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ypow7h" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
   <bpmn:process id="onboarding-process" name="Onboarding Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1" name="Start process call received">
       <bpmn:extensionElements>
@@ -36,6 +36,7 @@
         <zeebe:ioMapping>
           <zeebe:input source="=null" target="formStatus" />
           <zeebe:input source="=null" target="formDetails" />
+          <zeebe:input source="=if onboardingRequest.startingCreditValue != null then onboardingRequest.startingCreditValue else 0" target="startingCreditValue" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0xo4x4o</bpmn:incoming>
@@ -56,6 +57,8 @@
         <bpmn:extensionElements>
           <zeebe:ioMapping>
             <zeebe:output source="=creditCardOutput" target="creditCardOutput" />
+            <zeebe:output source="=startingCreditValue" target="startingCreditValue" />
+            <zeebe:output source="=creditCardExpirationDate" target="creditCardExpirationDate" />
           </zeebe:ioMapping>
         </bpmn:extensionElements>
         <bpmn:outgoing>Flow_0em1be6</bpmn:outgoing>
@@ -73,7 +76,12 @@
         <bpmn:extensionElements>
           <zeebe:formDefinition formId="onboarding-backoffice-simple-form" />
           <zeebe:ioMapping>
-            <zeebe:input source="=creditCardInput.owner" target="formOwner" />
+            <zeebe:input source="=creditCardOutput.owner" target="formCreditCardHolder" />
+            <zeebe:input source="=creditCardOutput.number" target="formCreditCardNumber" />
+            <zeebe:input source="=startingCreditValue &#62; 0" target="formCheckboxHasStartingCreditValue" />
+            <zeebe:input source="=date(creditCardExpirationDate)" target="formExpirationDate" />
+            <zeebe:input source="=startingCreditValue" target="formStartingCreditValue" />
+            <zeebe:input source="=onboardingRequest.monthIncome" target="formMonthIncome" />
             <zeebe:output source="=formStatus" target="creditCardOutput.status" />
             <zeebe:output source="=formDetails" target="formDetails" />
             <zeebe:output source="=formStatus" target="formStatus" />
@@ -452,7 +460,7 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_18casgq_di" bpmnElement="TextAnnotation_18casgq">
-        <dc:Bounds x="1510" y="178" width="100" height="84" />
+        <dc:Bounds x="1510" y="178" width="100" height="96" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1hqqdmu" bpmnElement="Event_0vlh6bj">

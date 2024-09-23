@@ -1,15 +1,102 @@
 {
   "components": [
     {
-      "label": "Owner",
+      "label": "Credit Card Number",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k9yjw1",
+        "columns": null
+      },
+      "id": "Field_1ovnleh",
+      "key": "formCreditCardNumber",
+      "readonly": true,
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Credit Card Holder",
       "type": "textfield",
       "layout": {
         "row": "Row_08ekm8f",
         "columns": null
       },
       "id": "Field_12o53co",
-      "key": "formOwner",
-      "readonly": true
+      "key": "formCreditCardHolder",
+      "readonly": true,
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "subtype": "date",
+      "dateLabel": "Expiration Date",
+      "label": "Date time",
+      "type": "datetime",
+      "layout": {
+        "row": "Row_1d7xzx1",
+        "columns": null
+      },
+      "id": "Field_0k7n65j",
+      "key": "formExpirationDate",
+      "validate": {
+        "required": true
+      },
+      "properties": {}
+    },
+    {
+      "label": "Has starting credit?",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_0muyo3f",
+        "columns": null
+      },
+      "id": "Field_1byp5c6",
+      "key": "formCheckboxHasStartingCreditValue",
+      "validate": {
+        "required": false
+      },
+      "readonly": false
+    },
+    {
+      "label": "Month income in €",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1ucmt34",
+        "columns": null
+      },
+      "id": "Field_0p5ekdd",
+      "key": "formMonthIncome",
+      "appearance": {
+        "suffixAdorner": "€"
+      },
+      "validate": {
+        "required": false
+      },
+      "readonly": true,
+      "conditional": {
+        "hide": "=formCheckboxHasStartingCreditValue = false"
+      }
+    },
+    {
+      "label": "Starting credit in €",
+      "type": "number",
+      "layout": {
+        "row": "Row_08d60wx",
+        "columns": null
+      },
+      "id": "Field_0bedzr4",
+      "key": "formStartingCreditValue",
+      "validate": {
+        "required": false,
+        "min": 0
+      },
+      "appearance": {
+        "suffixAdorner": "€"
+      },
+      "conditional": {
+        "hide": "=formCheckboxHasStartingCreditValue = false"
+      }
     },
     {
       "values": [
@@ -30,7 +117,10 @@
       },
       "id": "Field_1hd2kz0",
       "key": "formStatus",
-      "defaultValue": "<none>"
+      "defaultValue": "<none>",
+      "validate": {
+        "required": true
+      }
     },
     {
       "label": "Details",
@@ -40,7 +130,10 @@
         "columns": null
       },
       "id": "Field_0jshn33",
-      "key": "formDetails"
+      "key": "formDetails",
+      "conditional": {
+        "hide": "=formStatus = null or formStatus = \"SUCCESS\""
+      }
     }
   ],
   "type": "default",
@@ -49,7 +142,7 @@
   "executionPlatformVersion": "8.4.0",
   "exporter": {
     "name": "Camunda Modeler",
-    "version": "5.21.0"
+    "version": "5.27.0"
   },
-  "schemaVersion": 15
+  "schemaVersion": 16
 }

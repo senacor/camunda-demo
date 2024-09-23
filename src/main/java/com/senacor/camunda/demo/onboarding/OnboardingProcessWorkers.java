@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class OnboardingProcessWorkers {
 
     private final ZeebeClient client;
 
-    @JobWorker(type="onboarding-process-business-validation-person-minor")
+    @JobWorker(type = "onboarding-process-business-validation-person-minor")
     public void isPersonMinor(ActivatedJob activatedJob) {
         var birthday = activatedJob.getVariablesAsType(CamundaProcessVariables.class)
                 .onboardingRequest()
@@ -39,7 +41,7 @@ public class OnboardingProcessWorkers {
         }
     }
 
-    @JobWorker(type="onboarding-process-business-validation-income")
+    @JobWorker(type = "onboarding-process-business-validation-income")
     public void hasEnoughMoney(ActivatedJob activatedJob) {
         var monthIncome = activatedJob.getVariablesAsType(CamundaProcessVariables.class)
                 .onboardingRequest()
@@ -55,7 +57,7 @@ public class OnboardingProcessWorkers {
         }
     }
 
-    @JobWorker(type="onboarding-process-account-creation")
+    @JobWorker(type = "onboarding-process-account-creation")
     public void createAccount(ActivatedJob activatedJob) {
         var onboardingRequest = activatedJob.getVariablesAsType(CamundaProcessVariables.class).onboardingRequest();
         var amountOfCreditCards = Optional.ofNullable(onboardingRequest.getAmountOfCreditCards()).orElse(-1);
@@ -80,7 +82,7 @@ public class OnboardingProcessWorkers {
         }
     }
 
-    @JobWorker(type="onboarding-process-giro-card-creation")
+    @JobWorker(type = "onboarding-process-giro-card-creation")
     public void createGiroCard(ActivatedJob activatedJob) {
         var onboardingRequest = activatedJob.getVariablesAsType(CamundaProcessVariables.class).onboardingRequest();
         var owner = onboardingRequest.getPerson().getFirstName() + " " + onboardingRequest.getPerson().getSecondName();
@@ -93,30 +95,34 @@ public class OnboardingProcessWorkers {
         log.info("GiroCard created successfully.");
     }
 
-    @JobWorker(type="onboarding-process-credit-card-creation")
+    @JobWorker(type = "onboarding-process-credit-card-creation")
     public void createCreditCard(ActivatedJob activatedJob) {
         var creditCardMutliInstanceVariables = activatedJob.getVariablesAsType(CreditCardMutliInstanceVariables.class);
         var owner = creditCardMutliInstanceVariables.creditCardInput().owner();
         var expirationDate = LocalDate.now().plusYears(10);
         var number = "1234-5678-9876-000" + creditCardMutliInstanceVariables.loopCounter();
         var creditCardOutput = new CreditCard(owner, number, expirationDate.getMonthValue(), expirationDate.getYear(), "692", "SUCCESS");
-        if(owner.contains("Bad")) {
+        var processVariables = Map.of(
+                "creditCardOutput", creditCardOutput,
+                "creditCardExpirationDate", expirationDate.format(ISO_LOCAL_DATE)
+        );
+        if (owner.contains("Bad")) {
             log.error("Do business validation: Person is suspicious. Delegate to backoffice.");
             client.newThrowErrorCommand(activatedJob).errorCode("customer-onboarding-error-credit-card-creation-failed")
                     .errorMessage("Person is suspicious. Delegate to backoffice.")
-                    .variables(Map.of("creditCardOutput", creditCardOutput))
+                    .variables(processVariables)
                     .send()
                     .join();
         } else {
             client.newCompleteCommand(activatedJob.getKey())
-                    .variables(Map.of("creditCardOutput", creditCardOutput))
+                    .variables(processVariables)
                     .send()
                     .join();
             log.info("CreditCard created successfully.");
         }
     }
 
-    @JobWorker(type="onboarding-process-error-handling")
+    @JobWorker(type = "onboarding-process-error-handling")
     public void handleError(ActivatedJob activatedJob) {
         var errorCode = activatedJob.getVariablesAsType(CamundaProcessVariables.class)
                 .errorCode();

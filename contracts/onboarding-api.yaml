@@ -84,6 +84,12 @@ components:
           minimum: 1
           description: Amount of credit cards
           example: 2
+        startingCreditValue:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Requested credit by opening account.
+          example: 2
     Person:
       description: Represents person data
       type: object
