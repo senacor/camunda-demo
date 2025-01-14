@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Send message to main process
-POST http://localhost:8080/onboarding/process/387cb409-b7a4-476d-8df0-68244380b402/messages/person-authentication-completed
+POST http://localhost:8080/onboarding/process/08209086-b336-4598-8e8b-4e03d3fbccc4/messages/person-authentication-completed
 Content-Type: application/json
 
 {
